@@ -1,5 +1,6 @@
 version: '3'
-
+volumes:
+  data:
 networks:
     internal-pod:
         internal: true
@@ -12,6 +13,8 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: rootpassfordev
             MYSQL_DATABASE: dolibarr
+        volumes:
+            - data:/var/lib/mysql
         ports:
             - "3306:3306"
         networks:
@@ -44,7 +47,7 @@ services:
             - "9000:9000"
         depends_on:
             - mariadb
-            - mail
+        #    - mail
         networks:
             - internal-pod
             - external-pod
@@ -52,11 +55,11 @@ services:
             - "localhost.localdomain:127.0.0.1"
             - "host.docker.internal:host-gateway"
 
-    mail:
-        image: maildev/maildev
-        ports:
-            - "8081:1080"
-            - "25:1025"
-        networks:
-            - internal-pod
-            - external-pod
+    #mail:
+    #    image: maildev/maildev
+    #    ports:
+    #        - "8081:1080"
+    #        - "25:1025"
+    #    networks:
+    #        - internal-pod
+    #        - external-pod
